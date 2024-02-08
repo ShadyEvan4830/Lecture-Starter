@@ -1,0 +1,140 @@
+---
+title: "Lecture Pracice"
+format: pdf
+editor: visual
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(ggplot2)
+library(tibble)
+
+lake_huron_data <- tibble(year = 1875:1972, level = as.numeric(datasets::LakeHuron))
+
+ggplot(lake_huron_data, aes(x = year, y = level)) +
+  geom_point(size = 2) + 
+  geom_smooth(method = "loess", color = "blue") + 
+  labs(title = "Lake Huron Level (1875-1972)",
+       x = "Year",
+       y = "Level (feet)") +
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+```
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(ggplot2)
+library(dplyr)
+
+datasets::trees %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = Height)) +
+  geom_histogram(binwidth = 2, fill = "skyblue", color = "black") + 
+  labs(title = "Distribution of Heights of Black Cherry Trees",
+       x = "Height (feet)",
+       y = "Count") +
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+```
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(ggplot2)
+library(dplyr)
+
+datasets::ChickWeight %>% 
+  as_tibble() %>% 
+  ggplot(aes(x = Time, y = weight, group = Chick, color = as.factor(Chick))) +
+  geom_line() + 
+  geom_smooth(aes(group = 1), method = "loess", color = "black", se = FALSE) + # Add an overall trend line
+  scale_color_viridis_d(begin = 0.3, end = 0.9, option = "C") + 
+  labs(title = "Chick Weight Progression Over Time",
+       x = "Age (Days)",
+       y = "Weight (Grams)",
+       color = "Chick ID") +
+  theme_minimal() + 
+  theme(plot.title = element_text(hjust = 0.5), legend.position = "right") 
+
+```
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(ggplot2)
+library(tibble)
+
+sunspot_data <- tibble(year = 1700:1988,
+                       sunspots = as.numeric(datasets::sunspot.year) |> round(0))
+
+ggplot(sunspot_data, aes(x = sunspots)) +
+  geom_histogram(binwidth = 10, fill = "skyblue", color = "black") + # Specify bin width and add colors
+  labs(title = "Annual Number of Sunspots (1700-1988)",
+       x = "Number of Sunspots",
+       y = "Frequency") +
+  theme_minimal() + # Apply a minimalistic theme
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+```
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(dplyr)
+library(knitr)
+
+# Calculate the average speed of light per experiment
+average_speed <- datasets::morley %>%
+  group_by(Expt) %>%
+  summarise(Average_Speed = mean(Speed, na.rm = TRUE)) %>%
+  mutate(Average_Speed = round(Average_Speed, 0)) # Round to no significant digits
+
+# Use knitr::kable() to create a cross-referenced table
+knitr::kable(average_speed, 
+             col.names = c("Experiment", "Average Speed (km/s)"),
+             digits = 0)
+
+```
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(ggplot2)
+library(palmerpenguins)
+
+ggplot(data = penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species, shape = species), size = 15, alpha = 1) + 
+  scale_color_manual(values = c("#FF00FF", "#00FF00", "#0000FF")) + # Use bright, clashing colors
+  scale_shape_manual(values = c(17, 18, 19)) + # Uncommon shapes
+  labs(
+    title = "Penguin size, kinda important?",
+    subtitle = "Flipper length vs. body mass, or something like that",
+    x = "Flipper length???",
+    y = "Body mass???",
+    color = "Species??",
+    shape = "Species??"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(color = "red", size = 24, angle = 45, hjust = -0.1, vjust = -0.1), # Red, large, and angled title
+    plot.subtitle = element_text(face = "italic", color = "blue", size = 16, angle = 180), # Blue, italic subtitle, flipped upside down
+    axis.title.x = element_text(angle = 45, color = "green"), # Green, angled X axis title
+    axis.title.y = element_text(angle = -45, color = "purple"), # Purple, angled Y axis title
+    legend.position = "top", # Uncommon position for the legend
+    legend.background = element_rect(fill = "yellow", color = "pink", size = 5, linetype = "dotted"), # Yellow background with a pink, dotted border for the legend
+    plot.background = element_rect(fill = "lightgrey", color = "black"), # Light grey plot background with a black border
+    panel.background = element_rect(fill = "orange"), # Orange panel background
+    panel.grid.major = element_line(size = 2, linetype = "solid", color = "red"), # Thick red grid lines
+    panel.grid.minor = element_line(size = 1, linetype = "solid", color = "blue"), # Blue minor grid lines
+    axis.text.x = element_text(size = 14, color = "darkgreen"), # Large, dark green X axis text
+    axis.text.y = element_text(size = 14, color = "darkred"), # Large, dark red Y axis text
+    plot.caption = element_text(size = 10, color = "darkblue", hjust = 0, face = "italic", margin = margin(t = 20)) # Blue, italic caption with top margin
+  )
+
+```
+
